@@ -1,0 +1,65 @@
+{% extends "main.html" %}
+
+{% load static %}
+
+{% block content %}
+	
+
+	
+		  	 
+		  		<div class="post-header">
+		  			<b>Новини і статті!</b>
+		  		</div>
+
+		  		{% for header_post in post_news %}
+		  		<div class="post">
+			  		<div class="post-header">
+			  			
+			  			{{ header_post.title }}
+			  				
+			  		</div>	
+			  		
+			  		<div class="post-preview text-center">
+			  			<img src=" {{header_post.image.url}}"> 
+			  			
+			  		</div>
+
+			  		<div class=" post-content ">
+			  			<p>{{header_post.post| truncatechars_html:250}}
+			  			</p>
+			  		</div>
+			  		<div class="post-date ">
+			  			<div  > 
+			  				<i class="material-icons ">insert_invitation</i> 			
+			  				<span class="post-date-text">{{header_post.created|date:"M d, Y"}}</span>
+			  				
+
+			  				<i class="large material-icons">comment</i>
+			  				<span class="post-date-text">
+			  				 2 Comments 
+			  				</span>
+			  			 </div>
+			  			 
+			  				
+			  		 
+			  		</div>	
+			  			
+			  		 
+			  		<div class="post-btn">
+			  			<a href=" article/{{header_post.id}}/">
+			  				<button class=" button button1 ">Read more</button>
+			  			</a>
+			  		</div>
+		  		</div>
+
+		  		{% endfor %}
+			 
+		  	
+
+		  	 
+
+
+	 
+
+	
+{% endblock %}

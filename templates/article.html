@@ -1,0 +1,27 @@
+{% extends "main.html" %}
+
+{% load static  %}
+
+{% block content %}
+	<div class="article-post">
+		<div class="post-header text-center">
+			  			
+  			{{ article.title }}
+  				
+  		</div>	
+  		
+  		<div class="post-preview">
+  			<p class="text-center">  <img src=" {{article.image.url}}" height="60%" width="30%"> 
+  			</p>
+  		</div>
+
+  		<div class=" post-content ">
+  			<p>{{article.post}}
+  			</p>
+  		</div>
+		 
+
+	</div>
+		
+	
+{% endblock %}
