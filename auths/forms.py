@@ -12,5 +12,14 @@ class RegistarionForm(forms.ModelForm):
     class Meta:
         model = User
         fields = ('email', 'first_name')
+    #
+    # def __init__(self, *args, **kwargs):
+    #     super(RegistarionForm, self).__init__(*args, **kwargs)
 
-
+    def save(self, commit=True):
+        user = super(RegistarionForm, self).save(commit=False)
+        user.set_password(self.cleaned_data['password1'])
+        user.confirmed_registration = False
+        if commit:
+            user.save()
+        return user

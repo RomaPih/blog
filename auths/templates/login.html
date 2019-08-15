@@ -1,0 +1,9 @@
+ {% extends 'main.html' %}
+{% load static  %}
+{% load i18n %}
+
+{% block content %}
+    <div>
+        <a href="{% url 'recovery_password' %}">{% trans 'відновити пароль'|capfirst%}</a>
+    </div>
+{% endblock %}
