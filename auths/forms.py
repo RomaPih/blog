@@ -1,7 +1,7 @@
 from django import forms
 
 from users.models import User
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import ugettext_lazy as _, ugettext
 
 
 class RegistarionForm(forms.ModelForm):
@@ -23,3 +23,9 @@ class RegistarionForm(forms.ModelForm):
         if commit:
             user.save()
         return user
+    #
+    # def clean_email(self):
+    #     email = self.cleaned_data['email']
+    #     if User.objects.filter(email=email).exists():
+    #         raise forms.ValidationError(ugettext('Користувач з таким email вже є.'))
+    #     return email

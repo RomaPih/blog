@@ -24,6 +24,7 @@ class RegistrationView(TemplateView):
         if self.form.is_valid():
             user = self.form.save()
             return redirect(request.path)
+        return self.get(request, *args, **kwargs)
 
 
 class LoginView(TemplateView):
