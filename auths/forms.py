@@ -1,4 +1,5 @@
 from django import forms
+from django.contrib.auth.forms import AuthenticationForm
 
 from users.models import User
 from django.utils.translation import ugettext_lazy as _, ugettext
@@ -32,3 +33,18 @@ class RegistarionForm(forms.ModelForm):
         if commit:
             user.save()
         return user
+
+
+class LoginForm(AuthenticationForm):
+    def __init__(self):
+        super(LoginForm, self).__init__()
+
+    def clean(self):
+        has_error = False
+        try:
+            super(LoginForm, self).clean()
+        except forms.ValidationError:
+            has_error = True
+        if has_error or self.errors or (self.user_cache and not self.user_cache.confirmed_registration):
+            self._errors.clear()
+            raise forms.ValidationError(ugettext('Неправильний email або пароль'))

@@ -1,4 +1,5 @@
 from django.contrib import messages
+from django.contrib.auth.views import LoginView
 from django.core.signing import Signer, BadSignature
 from django.http import Http404
 from django.shortcuts import render, redirect
@@ -11,6 +12,7 @@ from auths.forms import RegistarionForm
 from users.models import User
 from django.utils.translation import ugettext_lazy as _
 from mysite import settings
+from auths.forms import LoginForm
 
 
 class RegistrationView(TemplateView):
@@ -58,8 +60,13 @@ class RegistrationConfirmView(RedirectView):
         return super(RegistrationConfirmView, self).dispatch(request, *args, **kwargs)
 
 
-class LoginView(TemplateView):
+class LogInView(TemplateView):
     template_name = 'login.html'
+
+    def get_context_data(self, request, *args, **kwargs):
+        if request.user.is_authenticated:
+            return redirect('main')
+        return LoginView(request, authentication_form=LoginForm)
 
 
 class RecoveryPasswordView(TemplateView):

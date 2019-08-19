@@ -1,9 +1,43 @@
  {% extends 'main.html' %}
 {% load static  %}
-{% load i18n %}
+{% load i18n blog %}
 
 {% block content %}
-    <div>
-        <a href="{% url 'recovery_password' %}">{% trans 'відновити пароль'|capfirst%}</a>
+
+
+    <div class="row">
+        <div class="col-xs-offset-3 col-xs-6">
+            <h1 class="text-center">{% trans 'Авторизація'|capfirst %}</h1>
+
+            <form action="" class="form-horizontal" method="post">{% csrf_token %}
+
+                {% form_errors form 'col-sm-offset-4 col-sm-8' %}
+                {% for field in form %}
+
+                    <div class="form-group {% if field.errors %} has-error {% endif %}">
+                        <label for="{{ field.id_for_label }}" class="control-label col-sm-6">
+                           {{ field.label }}
+                        </label>
+                        <div class="col-sm-6">
+                            {{ field }}
+                        </div>
+                    </div>
+                {% endfor %}
+                <div class="form-group">
+                    <div class="col-sm-offset-4 col-sm-8">
+                        <input type="submit" class="btn btn-primary" value="{% trans 'Увійти'|capfirst %}">
+                    </div>
+                </div>
+            </form>
+            <div class="row" style="margin-top: 40px;">
+                <div class="col-sm-offset-4 col-sm-8">
+                    <a href="{% url 'recovery_password' %}">{% trans 'відновити пароль'|capfirst%}</a>
+                    <br>
+                    <a href="{% url 'registration' %}">{% trans 'регістрація'|capfirst%}</a>
+
+                </div>
+            </div>
+
+        </div>
     </div>
 {% endblock %}
