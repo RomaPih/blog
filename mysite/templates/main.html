@@ -1,3 +1,4 @@
+{% load static blog %}
 <!DOCTYPE html>
 <html>
 <head>
@@ -22,9 +23,10 @@
 	<div class="wrapper">
 		<div class="container">
 			<div class="row  ">
-				 <div class="col-sm-3">
-				 	{% include "navbar.html" %}
-				 </div>
+                <div class="col-sm-3">
+                   {% include "navbar.html" %}
+                </div>
+                {% show_messages %}
   				<div class="col-sm-8"> 
   					{% block content %}
 					{% endblock %}	

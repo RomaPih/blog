@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sites',
     'blog',
     'users',
     'auths',
@@ -130,4 +131,11 @@ STATICFILES_DIRS = (
 
 MEDIA_URL = '/media/'
 
-MEDIA_ROOT = os.path.join(BASE_DIR, "static", "media")     
+MEDIA_ROOT = os.path.join(BASE_DIR, "static", "media")
+
+SITE_ID = 1
+
+LOGIN_URL = 'login'
+
+EMAIL_BACKEND = 'django.core.mail.backends.filebased.EmailBackend'
+EMAIL_FILE_PATH = os.path.join(BASE_DIR, 'tmp', 'email')

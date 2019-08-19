@@ -12,9 +12,18 @@ class RegistarionForm(forms.ModelForm):
     class Meta:
         model = User
         fields = ('email', 'first_name')
-    #
-    # def __init__(self, *args, **kwargs):
-    #     super(RegistarionForm, self).__init__(*args, **kwargs)
+
+    def clean(self):
+        data = super(RegistarionForm, self).clean()
+        if 'password1' not in self.errors and 'password2' not in self.errors:
+            if data['password1'] != data['password2']:
+                self.add_error('password1', ugettext('Паролі не співпали'))
+
+    def clean_email(self):
+        email = self.cleaned_data['email']
+        if User.objects.filter(email=email).exists():
+            raise forms.ValidationError(ugettext('Користувач з таким email вже є.'))
+        return email
 
     def save(self, commit=True):
         user = super(RegistarionForm, self).save(commit=False)
@@ -23,9 +32,3 @@ class RegistarionForm(forms.ModelForm):
         if commit:
             user.save()
         return user
-    #
-    # def clean_email(self):
-    #     email = self.cleaned_data['email']
-    #     if User.objects.filter(email=email).exists():
-    #         raise forms.ValidationError(ugettext('Користувач з таким email вже є.'))
-    #     return email

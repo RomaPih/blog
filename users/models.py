@@ -1,10 +1,13 @@
 from django.contrib.auth.base_user import BaseUserManager
 from django.core.mail import send_mail
+from django.contrib.sites.models import Site
+from django.core.signing import Signer
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser
 from django.contrib.auth.models import PermissionsMixin
+from django.urls import reverse
 from django.utils import timezone
-from django.utils.translation import gettext as _
+from django.utils.translation import gettext as _, ugettext
 
 
 # Create your models here.
@@ -59,7 +62,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     is_staff = models.BooleanField(_('staff status'), default=False)
     is_active = models.BooleanField(_('active'), default=True)
     date_joined = models.DateTimeField(_('date joined'), default=timezone.now)
-    confirmed_registtration = models.BooleanField(_('confirmed_registration'), default=True)
+    confirmed_registration = models.BooleanField(_('confirmed registration'), default=True)
     objects = UserManager()
 
     REQUIRED_FIELDS = []
@@ -87,3 +90,13 @@ class User(AbstractBaseUser, PermissionsMixin):
     def email_user(self, subject, message, from_email=None, **kwargs):
         """Send an email to this user."""
         send_mail(subject, message, from_email, [self.email], **kwargs)
+
+    def send_registration_email(self):
+        url = 'http://{}{}'.format(
+            Site.objects.get_current().domain,
+            reverse('registration_confirm', kwargs={'token': Signer(salt='registration-confirm').sign(self.pk)})
+        )
+        self.email_user(
+            ugettext('Підтвердіть реєстрацію'),
+            ugettext('Для підтвердження перейдіть по ссилці {}'.format(url))
+        )
