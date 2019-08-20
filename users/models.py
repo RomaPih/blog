@@ -1,7 +1,10 @@
+import hashlib
+import random
+
 from django.contrib.auth.base_user import BaseUserManager
 from django.core.mail import send_mail
 from django.contrib.sites.models import Site
-from django.core.signing import Signer
+from django.core.signing import Signer, TimestampSigner
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser
 from django.contrib.auth.models import PermissionsMixin
@@ -91,6 +94,10 @@ class User(AbstractBaseUser, PermissionsMixin):
         """Send an email to this user."""
         send_mail(subject, message, from_email, [self.email], **kwargs)
 
+    def get_last_login_hash(self):
+        # return hashlib.sha256(str(random.getrandbits(256)).encode('utf-8')).hexdigest()[:8]
+        return hashlib.md5(self.last_login.strftime('%Y-%m-%d-%H-%M-%S-%f').encode('utf-8')).hexdigest()[:8]
+
     def send_registration_email(self):
         url = 'http://{}{}'.format(
             Site.objects.get_current().domain,
@@ -98,5 +105,17 @@ class User(AbstractBaseUser, PermissionsMixin):
         )
         self.email_user(
             ugettext('Підтвердіть реєстрацію'),
+            ugettext('Для підтвердження перейдіть по ссилці {}'.format(url))
+        )
+
+    def send_password_recovery_email(self):
+        data = '{}:{}'.format(self.pk, self.get_last_login_hash())
+        token = TimestampSigner(salt='recovery-password-form').sign(data)
+        url = 'http://{}{}'.format(
+            Site.objects.get_current().domain,
+            reverse('recovery_password_form', kwargs={'token': token})
+        )
+        self.email_user(
+            ugettext('Підтвердіть відновлення паролю'),
             ugettext('Для підтвердження перейдіть по ссилці {}'.format(url))
         )

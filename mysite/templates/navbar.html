@@ -13,7 +13,7 @@
         
         {% if user.is_authenticated %}
             <p style="margin-top: 10px">
-                <a href="{% url 'logout' %}">{% trans 'вихід'|capfirst %}</a>
+                <a href="{% url 'auth_logout' %}">{% trans 'вихід'|capfirst %}</a>
             </p>
         {% endif %}
 		
