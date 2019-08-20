@@ -1,6 +1,4 @@
 import hashlib
-import random
-
 from django.contrib.auth.base_user import BaseUserManager
 from django.core.mail import send_mail
 from django.contrib.sites.models import Site

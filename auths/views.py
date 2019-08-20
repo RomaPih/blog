@@ -4,11 +4,9 @@ from django.contrib.auth.views import LoginView
 from django.core.signing import Signer, BadSignature, TimestampSigner
 from django.http import Http404
 from django.shortcuts import render, redirect
-
 # Create your views here.
 from django.urls import reverse_lazy
 from django.views.generic import TemplateView, RedirectView
-
 from auths.forms import RegistarionForm
 from users.models import User
 from django.utils.translation import ugettext_lazy as _
@@ -110,7 +108,6 @@ class PasswordRecoveryConfirmView(TemplateView):
             raise Http404
         user = User.objects.get(pk=user_id)
         if user.get_last_login_hash() != last_login_hash:
-        # if user.get_last_login_hash() == last_login_hash:
             raise Http404
         if not user.confirmed_registration:
             user.confirmed_registration = True
